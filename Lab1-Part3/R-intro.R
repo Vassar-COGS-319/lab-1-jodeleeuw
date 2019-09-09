@@ -31,8 +31,6 @@
 2^8
 3^19
 
-# ANSWER NEEDED HERE.
-
 #### VARIABLES ####
 
 # What if you want to store the result of 2 + 2 and use it later? You need a variable.
