@@ -22,9 +22,14 @@
 
 # Try adding some code below to subtract (-), multiply (*), and divide (/).
 
-# ANSWER NEEDED HERE.
+400 - 81
+159.5 * 2
+1276 / 4
 
 # Now add some code to create exponentials (^), like 2 raised to the 8th power.
+
+2^8
+3^19
 
 # ANSWER NEEDED HERE.
 
@@ -40,12 +45,12 @@ result <- 2 + 2
 
 # Create a variable below called 'message' and assign it the value "Welcome to R!"
 
-# ANSWER NEEDED HERE.
+result <- "Welcome to R!"
+result <- 'Welcome to R!' # note that either single quote or double quotes is fine, but they must match.
 
 # Now change 'result' to the output of 6 times 7.
 
-# ANSWER NEEDED HERE.
-
+result <- 6 * 7
 
 #### INTERLUDE ####
 
@@ -69,7 +74,7 @@ my.array[2]
 
 # If you wanted to get the value 7 out of the array, how would you do that?
 
-# ANSWER NEEDED HERE.
+my.array[4]
 
 # You can get more than one element out of an array at a time. Use an array to specify
 # the locations that you want to extract.
@@ -79,7 +84,7 @@ my.array[c(1,5)]
 
 # How would you get just the second and fourth elements?
 
-# ANSWER NEEDED HERE.
+my.array[c(2,4)]
 
 # To change the value of an element in an array, just assign it a new value like it is
 # a variable
@@ -108,7 +113,9 @@ sequence <- seq(from=1, to=10)
 # Try generating a sequence below from 0 to 100 in steps of 10. (e.g., 0, 10, 20, ...)
 # Read the documentation on seq to figure out what you need to change.
 
-# ANSWER NEEDED HERE.
+seq(from=0, to=100, by=10)
+seq(0,100,10) # note that you can choose to name the arguments or not. 
+seq(by=10, from=0, to=100) # an advantage of naming is that the order doesn't matter.
 
 # You can use basic mathematical operators with vectors and scalars
 # (A scalar is a vector with a single element, or, in plain English, just a number).
@@ -128,7 +135,13 @@ array.c <- array.a + array.b
 # Test it out below, and then write a short description of what is happening
 # in a comment.
 
-# ANSWER NEEDED HERE.
+a <- c(1,2,3)
+b <- c(4,5)
+
+a + b
+
+# A warning message is displayed, but the computation repeats the shorter array as needed
+# here the output is (1+4, 2+5, 3+4)
 
 #### FINDING HELPFUL FUNCTIONS ####
 
@@ -149,22 +162,25 @@ array.c <- array.a + array.b
 
 # 1) Take the square root of 16
 
-# ANSWER NEEDED HERE.
+sqrt(16)
 
 # 2) Create an array that is 10 repetitions of the number 3
 #    e.g., (3, 3, 3, 3, 3, 3, 3, 3, 3, 3).
 
-# ANSWER NEEDED HERE.
+rep(3,10)
 
 # 3) Add all the numbers in the vector below.
 
 add.me <- c(2,4,6,7,8,5,12) # the answer is 44
-
-# ANSWER NEEDED HERE.
+sum(add.me)
 
 # 4) Generate a random integer between 0 and 100.
 
-# ANSWER NEEDED HERE
+# many ways to do this!
+
+sample(0:100, 1) # generate a sequence from 0 to 100 and then sample one item.
+sample.int(101, 1) - 1 # sample.int samples from 1 to the first number, so need to subtract 1 to get 0 in the set.
+floor(runif(1, 0, 101)) # floor always rounds down, e.g., 1.99 -> 1.00
 
 # (This might be a good moment to commit and push your code!)
 
@@ -185,7 +201,11 @@ print(a)
 # Write code that generates a random integer between 1 and 4, and prints "EVEN"
 # or "ODD" to indicate if the number is even or odd.
 
-# ANSWER NEEDED HERE
+if(sample(1:4,1)%%2==0){ # note that %% takes the remainder of the division, e.g. 3%%2 -> 1
+  print("EVEN")
+} else {
+  print("ODD")
+}
 
 #### EXTERNAL LIBRARIES ####
 
@@ -308,7 +328,21 @@ multiply.numbers(2,3) # outputs 6
 # Write a function that takes two numbers and returns a random integer that is between
 # the two numbers (including both end numbers as possibilities).
 
-# ANSWER NEEDED HERE.
+random.between <- function(low, high){
+  if(low == high){ # this check is important! without it, the function will behave unexpectedly when low == high. try it!
+    return(low)
+  }
+  if(low > high){
+    stop("lower bound must be <= upper bound") # throw an error message if low is not less than or equal to high.
+  }
+  output <- sample(low:high, 1)
+  return(output)
+}
+
+# let's test the function!
+random.between(1,3)
+random.between(1,1)
+random.between(3,1) # error message
 
 #### A FEW MISC. EXTRAS ####
 
@@ -349,8 +383,13 @@ log.sample.array <- sapply(sample.array, function(x){ return(log(x)) })
 #  - Otherwise output FALSE
 
 input <- seq(from=0, to=1, by=0.05)
+answer <- sapply(input, function(x){
+  return(runif(1,0,1) <= x)
+})
 
-# ANSWER NEEDED HERE.
+# another way of doing it, without sapply:
+
+answer <- runif(length(input),0,1) <= input
 
 # What if we want to run a function on more than one array, and store the result in an array?
 # Consider the following:
@@ -387,7 +426,18 @@ sample.data$match <- mapply(function(big.or.small, value){
 input.1 <- c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE)
 input.2 <- c(TRUE, TRUE, FALSE, FALSE, TRUE, TRUE)
 
-# ANSWER NEEDED HERE.
+answer <- mapply(function(x,y){
+  if(x==y){
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}, input.1, input.2)
+
+# yes, you could also solve it just by doing:
+answer <- input.1 != input.2
+
+# but you should practice mapply!
 
 # Writing a better sample() function.
 
@@ -417,7 +467,10 @@ sample(c(10), 1)
 # Search the internet for a function that will tell you how many items are in the vector.
 
 better.sample <- function(input.vector, sample.size){
-  
+  if(length(input.vector)==1){
+    return(rep(input.vector[1],sample.size))
+  }
+  return(sample(input.vector, sample.size))
 }
 
 better.sample(c(10), 1)
